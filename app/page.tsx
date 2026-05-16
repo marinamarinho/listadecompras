@@ -125,7 +125,7 @@ export default function ListaPage() {
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <div className="pt-4 pb-6">
         <p className="font-mono text-xs mb-3" style={{ color: "var(--muted2)", letterSpacing: "0.12em" }}>
-          Menu izakaya · 2 pessoas
+          Menu izakaya
         </p>
         <h1 style={{
           fontFamily: "var(--font-serif)", fontStyle: "italic",
