@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 type Item = {
   n: string;
@@ -93,16 +93,15 @@ const DATA: Category[] = [
 const TOTAL = DATA.reduce((a, c) => a + c.items.length, 0);
 const STORAGE_KEY = "izakaya-v2";
 
-export default function ListaPage() {
-  const [checked, setChecked] = useState<Record<string, boolean>>({});
-  const [collapsed, setCollapsed] = useState<Record<number, boolean>>({});
+function loadChecked(): Record<string, boolean> {
+  if (typeof window === "undefined") return {};
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+  catch { return {}; }
+}
 
-  useEffect(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-      setChecked(saved);
-    } catch {}
-  }, []);
+export default function ListaPage() {
+  const [checked, setChecked] = useState<Record<string, boolean>>(loadChecked);
+  const [collapsed, setCollapsed] = useState<Record<number, boolean>>({});
 
   function toggle(key: string) {
     setChecked((prev) => {
