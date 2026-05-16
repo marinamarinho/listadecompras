@@ -123,34 +123,24 @@ export default function ListaPage() {
     <div className="max-w-lg mx-auto px-4 pt-10 pb-16 space-y-8">
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <div className="relative overflow-hidden pt-4 pb-6">
-        <div aria-hidden className="select-none pointer-events-none" style={{
-          position: "absolute", right: "-0.5rem", top: "-1rem",
+      <div className="pt-4 pb-6">
+        <p className="font-mono text-xs mb-3" style={{ color: "var(--muted2)", letterSpacing: "0.12em" }}>
+          Menu izakaya · 2 pessoas
+        </p>
+        <h1 style={{
           fontFamily: "var(--font-serif)", fontStyle: "italic",
-          fontSize: "clamp(5rem,20vw,11rem)", lineHeight: 1,
-          color: "rgba(139,58,30,0.055)", whiteSpace: "nowrap",
+          fontSize: "clamp(3rem,10vw,6rem)", lineHeight: 0.95, color: "var(--text)",
         }}>
-          買い物
-        </div>
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <p className="font-mono text-xs mb-3" style={{ color: "var(--muted2)", letterSpacing: "0.12em" }}>
-            居酒屋 · 2 pessoas
-          </p>
-          <h1 style={{
-            fontFamily: "var(--font-serif)", fontStyle: "italic",
-            fontSize: "clamp(3rem,10vw,6rem)", lineHeight: 0.95, color: "var(--text)",
-          }}>
-            Lista de<br />Compras
-          </h1>
-          <div className="flex items-center gap-3 mt-5">
-            <div className="flex-1 rounded-full h-1" style={{ background: "var(--border2)" }}>
-              <div className="h-1 rounded-full transition-all duration-500"
-                style={{ width: `${pct}%`, background: "var(--accent)" }} />
-            </div>
-            <p className="font-mono shrink-0" style={{ fontSize: "0.62rem", color: "var(--muted2)" }}>
-              {done}/{TOTAL} · {pct}%
-            </p>
+          Lista de<br />Compras
+        </h1>
+        <div className="flex items-center gap-3 mt-5">
+          <div className="flex-1 rounded-full h-1" style={{ background: "var(--border2)" }}>
+            <div className="h-1 rounded-full transition-all duration-500"
+              style={{ width: `${pct}%`, background: "var(--accent)" }} />
           </div>
+          <p className="font-mono shrink-0" style={{ fontSize: "0.62rem", color: "var(--muted2)" }}>
+            {done}/{TOTAL} · {pct}%
+          </p>
         </div>
       </div>
 
@@ -263,7 +253,7 @@ export default function ListaPage() {
         fontFamily: "var(--font-mono)", fontSize: "0.58rem",
         color: "var(--muted2)", letterSpacing: "0.08em",
       }}>
-        居酒屋 em casa · Just One Cookbook
+        Just One Cookbook
       </footer>
     </div>
   );
