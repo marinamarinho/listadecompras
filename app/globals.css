@@ -4,16 +4,16 @@
 
 /* ── Variables ─────────────────────────────────────────────── */
 :root {
-  --bg:       #f2ede3;
-  --surface:  #ece6d8;
-  --surface2: #e4ddc9;
-  --border:   rgba(90,72,48,0.12);
-  --border2:  rgba(90,72,48,0.22);
-  --text:     #1e1710;
-  --muted:    #9c8e7a;
-  --muted2:   #6b5e4c;
+  --bg:       #f5f0e8;
+  --surface:  #ffffff;
+  --surface2: #faf7f2;
+  --border:   #f0ebe0;
+  --border2:  #e8d8c0;
+  --text:     #2c2420;
+  --muted:    #9a8878;
+  --muted2:   #c4a882;
   --accent:   #8b3a1e;
-  --accent2:  #b04e28;
+  --accent2:  #a0521a;
 }
 
 /* ── Base ──────────────────────────────────────────────────── */

@@ -24,17 +24,15 @@ export default function NavBar() {
         display: "flex", alignItems: "center",
         padding: "0 1.25rem",
         height: "52px",
-        background: "rgba(242,237,227,0.92)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        borderBottom: "1px solid var(--border)",
+        background: "var(--accent)",
+        borderBottom: "none",
       }}>
         <button
           onClick={() => setOpen(true)}
           aria-label="Abrir menu"
           style={{
             background: "none", border: "none", cursor: "pointer",
-            color: "var(--text)", fontSize: "1.15rem", lineHeight: 1,
+            color: "#fff", fontSize: "1.15rem", lineHeight: 1,
             padding: "6px 8px 6px 0", marginRight: "auto",
           }}
         >
@@ -44,7 +42,7 @@ export default function NavBar() {
         <span style={{
           position: "absolute", left: "50%", transform: "translateX(-50%)",
           fontFamily: "var(--font-serif)", fontStyle: "italic",
-          fontSize: "1rem", color: "var(--accent)",
+          fontSize: "1rem", color: "rgba(255,255,255,0.9)",
           pointerEvents: "none",
         }}>
           Lista de Compras

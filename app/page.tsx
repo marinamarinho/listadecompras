@@ -162,27 +162,40 @@ export default function ListaPage() {
         return (
           <section key={ci} className="space-y-2">
 
-            {/* Section label / toggle */}
-            <button
-              onClick={() => toggleCollapse(ci)}
-              className="section-label w-full text-left flex items-center justify-between gap-2"
-              style={{ background: "none", border: "none", cursor: "pointer", padding: "0" }}
-            >
-              <span>{cat.icon} {cat.name}</span>
-              <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span>{catDone}/{cat.items.length}</span>
-                <span style={{
-                  display: "inline-block",
-                  transition: "transform 0.2s",
-                  transform: isCollapsed ? "rotate(-90deg)" : "rotate(0deg)",
-                  fontSize: "0.55rem",
-                }}>▾</span>
-              </span>
-            </button>
+            {/* Category header — terracota filled */}
+            <div className="card" style={{ overflow: "hidden" }}>
+              <button
+                onClick={() => toggleCollapse(ci)}
+                style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  width: "100%", padding: "11px 14px",
+                  background: "var(--accent)", color: "#fff",
+                  border: "none", cursor: "pointer",
+                  WebkitTapHighlightColor: "transparent",
+                }}
+              >
+                <span style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "13.5px" }}>
+                  <span>{cat.icon}</span>
+                  <span>{cat.name}</span>
+                </span>
+                <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{
+                    background: "rgba(255,255,255,0.2)", borderRadius: "20px",
+                    fontSize: "11px", padding: "2px 9px", fontFamily: "var(--font-mono)",
+                  }}>
+                    {catDone}/{cat.items.length}
+                  </span>
+                  <span style={{
+                    display: "inline-block", fontSize: "14px", opacity: 0.8,
+                    transition: "transform 0.2s",
+                    transform: isCollapsed ? "rotate(-90deg)" : "rotate(0deg)",
+                  }}>▾</span>
+                </span>
+              </button>
 
-            {/* Items card */}
+            {/* Items */}
             {!isCollapsed && (
-              <div className="card" style={{ overflow: "hidden" }}>
+              <div>
                 {cat.items.map((item, ii) => {
                   const key = `${ci}-${ii}`;
                   const isDone = checked[key];
@@ -240,6 +253,7 @@ export default function ListaPage() {
                 })}
               </div>
             )}
+            </div>
           </section>
         );
       })}
