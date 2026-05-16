@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Izakaya">
+<meta name="theme-color" content="#8b3a1e">
+<meta name="description" content="Lista de compras para o menu izakaya — 2 pessoas">
+<title>居酒屋 · Compras Izakaya</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;background:#f5f0e8;color:#2c2420;min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* HEADER */
+header{background:#8b3a1e;color:#fff;padding:18px 16px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.h-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.h-left{display:flex;align-items:center;gap:10px}
+.kanji{font-size:26px;opacity:.65;letter-spacing:-1px}
+.h-title{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.h-sub{font-size:11px;opacity:.75;margin-top:1px}
+.reset-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:5px 13px;border-radius:20px;font-size:11px;cursor:pointer;font-family:inherit;transition:background .15s}
+.reset-btn:active{background:rgba(255,255,255,.25)}
+.progress-wrap{background:rgba(0,0,0,.2);height:4px;border-radius:0}
+.progress-fill{background:#fff;height:4px;border-radius:0;transition:width .3s ease;width:0%}
+.progress-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0 12px}
+.progress-txt{font-size:11px;opacity:.85}
+.progress-pct{font-size:11px;font-weight:700;opacity:.9}
+
+/* MAIN */
+main{padding:14px;max-width:600px;margin:0 auto;padding-bottom:40px}
+
+/* CATEGORY CARD */
+.cat{background:#fff;border-radius:12px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.cat-hd{background:#8b3a1e;color:#fff;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.cat-hd-l{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px}
+.cat-hd-r{display:flex;align-items:center;gap:8px}
+.cat-badge{background:rgba(255,255,255,.2);border-radius:20px;font-size:11px;padding:2px 9px;font-weight:500}
+.cat-chevron{font-size:14px;transition:transform .2s;display:inline-block;opacity:.8}
+.cat.closed .cat-chevron{transform:rotate(-90deg)}
+.cat-body{overflow:hidden;transition:max-height .25s ease}
+.cat.closed .cat-body{max-height:0!important}
+
+/* ITEMS */
+.item{display:flex;align-items:flex-start;gap:11px;padding:10px 14px;border-bottom:1px solid #f0ebe0;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .1s}
+.item:last-child{border-bottom:none}
+.item:active{background:#fdf8f2}
+.cb{width:22px;height:22px;border:2px solid #d4c9bc;border-radius:6px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .18s;background:#fff}
+.item.done .cb{background:#8b3a1e;border-color:#8b3a1e}
+.cb-tick{display:none;color:#fff;font-size:13px;font-weight:700;line-height:1}
+.item.done .cb-tick{display:block}
+.item-body{flex:1;min-width:0}
+.item-row{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.item-name{font-size:13.5px;line-height:1.45;color:#2c2420;transition:color .18s}
+.item.done .item-name{text-decoration:line-through;color:#b0a090}
+.badge-opt{display:inline-block;background:#fef3e8;color:#a0521a;border-radius:4px;font-size:10px;padding:1px 6px;font-weight:600;vertical-align:middle;flex-shrink:0}
+.item-recipe{font-size:10px;color:#c4a882;font-style:italic;margin-top:2px}
+.item-sub{font-size:11.5px;color:#9a8878;margin-top:4px;line-height:1.4;padding:5px 9px;background:#faf7f2;border-radius:6px;border-left:2px solid #e8d8c0}
+
+/* FOOTER */
+footer{text-align:center;padding:10px 0 30px;font-size:11px;color:#c4b4a4}
+.f-kanji{font-size:22px;display:block;margin-bottom:4px;opacity:.4}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-top">
+    <div class="h-left">
+      <span class="kanji">居酒屋</span>
+      <div>
+        <div class="h-title">Compras Izakaya</div>
+        <div class="h-sub">Menu japonês · 2 pessoas</div>
+      </div>
+    </div>
+    <button class="reset-btn" onclick="resetAll()">Resetar</button>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" id="bar"></div></div>
+  <div class="progress-row">
+    <span class="progress-txt" id="ptxt">0 de 42 itens marcados</span>
+    <span class="progress-pct" id="ppct">0%</span>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<footer>
+  <span class="f-kanji">居酒屋</span>
+  Izakaya em casa · Just One Cookbook
+</footer>
+
+<script>
+const DATA = [
+  {
+    icon: '🥬', name: 'Hortifrúti e frescos',
+    items: [
+      { n: 'Pepino japonês ou persa — 2 a 3 unidades', r: 'sunomono', s: 'Sub: pepino inglês — retire as sementes com uma colher para não aguardar o molho' },
+      { n: 'Repolho verde — ¼ de repolho grande (~340g)', r: 'gyoza', s: 'Bata bem fino e esprema toda a água antes de misturar no recheio' },
+      { n: 'Cebolinha verde — 1 maço', r: 'soba · gyoza · la-yu', s: null },
+      { n: 'Alho — 1 cabeça', r: 'gyoza · edamame · la-yu', s: null },
+      { n: 'Gengibre fresco — 1 pedaço (~5cm)', r: 'gyoza · la-yu', s: null },
+      { n: 'Komatsuna ou espinafre — 60g', r: 'soba', s: 'Sub: qualquer folha verde macia (agrião, rúcula)' },
+      { n: 'Shiitake fresco — 2 unidades', r: 'gyoza', s: 'Sub: shiitake seco reidratado em água morna por 20min' },
+      { n: 'Batata-doce japonesa (satsumaimo) — 1 unidade', r: 'tempura', s: 'Sub: batata-doce comum — funciona muito bem' },
+      { n: 'Abóbora kabocha — ⅛ pequena', r: 'tempura', s: 'Sub: abóbora cabotiã ou butternut — corte em fatias finas' },
+      { n: 'Berinjela japonesa — 1 unidade', r: 'tempura', s: 'Sub: berinjela comum — corte em fatias mais finas' },
+      { n: 'Cogumelo eryngui (king oyster) — 2 unidades', r: 'tempura', s: 'Sub: portobello ou shiitake grande' },
+      { n: 'Shiso (folha de perilla) — 4 folhas', r: 'tempura', o: true, s: 'Opcional — pode omitir sem problema' },
+      { n: 'Raiz de lotus (renkon) — ~5cm', r: 'tempura', o: true, s: '⚠️ Difícil de achar — pode omitir. Se encontrar em loja asiática, compre pré-cozida' },
+      { n: 'Daikon — 2 pedaços de 5cm (para ralar)', r: 'tempura', s: 'Sub: rabanete — você já tem! Rale e esprema levemente antes de servir' },
+    ]
+  },
+  {
+    icon: '🍤', name: 'Proteínas e frutos do mar',
+    items: [
+      { n: 'Camarão grande/jumbo — 10 unidades', r: 'tempura de camarão', s: 'Black tiger prawns são os ideais. Descasque deixando o rabo' },
+      { n: 'Carne suína moída — 225g', r: 'gyoza', s: 'Sub: mista suíno + bovino funciona bem · ou peça para moer paleta/pernil no açougue' },
+      { n: 'Kamaboko (bolinho de peixe) — 1 pacote', r: 'soba', s: 'Pode omitir ou substituir por surimi fatiado. Procure em lojas asiáticas' },
+      { n: 'Kani-kama (surimi) — 1 pacote pequeno', r: 'sunomono', o: true, s: 'Opcional mas clássico — dá proteína e cor à salada' },
+    ]
+  },
+  {
+    icon: '🧊', name: 'Congelados',
+    items: [
+      { n: 'Edamame com casca — 280–400g (1 pacote)', r: 'edamame apimentado', s: 'Importado do Japão já vem pré-cozido — só 1 min na água fervente' },
+    ]
+  },
+  {
+    icon: '🍜', name: 'Massas, farinhas e amidos',
+    items: [
+      { n: 'Macarrão soba — 200g (1 pacote)', r: 'soba', s: null },
+      { n: 'Farinha de trigo — mín. 500g', r: 'gyoza wrappers + tempura', s: 'Gyoza usa ~240g · Tempura usa ~120g · Deixe gelar a farinha antes do tempura' },
+      { n: 'Fécula de batata ou amido de milho', r: 'gyoza + tempura', s: 'Para polvilhar os wrappers do gyoza (evita grudar) e empanar o camarão' },
+      { n: 'Ovo — 1 unidade grande (gelado)', r: 'tempura', s: 'Importante estar bem gelado — deixe na geladeira até a hora de usar' },
+    ]
+  },
+  {
+    icon: '🇯🇵', name: 'Despensa japonesa',
+    items: [
+      { n: 'Kombu (alga kelp seco) — 1 folha 10x10cm', r: 'dashi', s: 'Sub rápida: dashi packet ou dashi powder · Procure em lojas asiáticas' },
+      { n: 'Katsuobushi (flocos de bonito) — mín. 20g', r: 'dashi · soba · tentsuyu', s: '⚠️ Faça 1,5x a receita de dashi — ele é base do caldo do soba E do tentsuyu do tempura' },
+      { n: 'Shoyu — 1 garrafa', r: 'dashi · gyoza · edamame · sunomono · tentsuyu', s: 'Usado em quase tudo — verifique se está cheio' },
+      { n: 'Mirin — 1 garrafa', r: 'dashi · edamame · tentsuyu', s: 'Sub emergencial: uma pitada de açúcar + pouco saquê' },
+      { n: 'Saquê de culinária — 1 garrafa', r: 'dashi · gyoza', s: 'Pode omitir do gyoza (é opcional na receita)' },
+      { n: 'Missô — 1 pote pequeno (awase)', r: 'edamame apimentado', s: 'Qualquer tipo funciona. A Nami usa awase (mistura de vermelho + branco)' },
+      { n: 'Vinagre de arroz não temperado — 1 garrafa', r: 'sunomono · molho gyoza · ponzu', s: 'Importante ser não temperado (unseasoned) — o temperado já tem açúcar e sal' },
+      { n: 'Óleo de gergelim torrado — 1 garrafa', r: 'gyoza · la-yu', s: 'Essencial para la-yu — não substitua pelo cru (cor clara). São produtos diferentes' },
+      { n: 'Óleo neutro — mínimo 1,5 litro', r: 'tempura · edamame · la-yu', s: 'O tempura usa 3–4 xícaras só para fritar. Girassol, canola ou milho' },
+      { n: 'Alga wakame seca — 1 pacote pequeno', r: 'sunomono · soba', s: 'Reidrate em água por 5 min e esprema bem antes de usar' },
+      { n: 'Gergelim branco torrado — 1 pacote', r: 'sunomono · la-yu', s: null },
+      { n: 'Açúcar — um pouco', r: 'sunomono · tentsuyu', s: null },
+    ]
+  },
+  {
+    icon: '🌶️', name: 'Condimentos e temperos',
+    items: [
+      { n: 'Sambal oelek — 1 potinho', r: 'edamame apimentado', s: 'Sub: sriracha (mais doce) · ou pimenta calabresa amassada com fio de azeite' },
+      { n: 'Gochugaru (pimenta coreana em flocos) — ⅓ xícara', r: 'la-yu caseiro', s: 'Sub: pimenta calabresa seca moída — use MENOS, é muito mais forte · Procure em loja asiática' },
+      { n: 'Pimenta Sichuan — ½ colher de chá', r: 'la-yu caseiro', o: true, s: 'Opcional — dá aroma floral e formigamento único. Sem substituto exato, pode omitir' },
+      { n: 'Pimenta do reino preta (moída na hora)', r: 'gyoza', s: null },
+      { n: 'Sal kosher ou sal grosso', r: 'gyoza wrappers · edamame · sunomono', s: null },
+      { n: 'Shoyu branco (shiro shoyu)', r: 'ponzu transparente', o: true, s: 'Opcional — para o molho transparente da gyoza igual ao do seu restaurante favorito. Procure em loja asiática' },
+      { n: 'Shichimi togarashi', r: 'soba', o: true, s: 'Sub: pimenta calabresa + gergelim torrado na hora de servir' },
+    ]
+  }
+];
+
+const TOTAL = DATA.reduce((a,c)=>a+c.items.length,0);
+let state = JSON.parse(localStorage.getItem('izakaya-v1')||'{}');
+
+function save(){localStorage.setItem('izakaya-v1',JSON.stringify(state))}
+
+function updateProgress(){
+  const n=Object.values(state).filter(Boolean).length;
+  const pct=Math.round(n/TOTAL*100);
+  document.getElementById('bar').style.width=pct+'%';
+  document.getElementById('ptxt').textContent=n+' de '+TOTAL+' itens marcados';
+  document.getElementById('ppct').textContent=pct+'%';
+}
+
+function updateCatBadge(catEl){
+  const done=catEl.querySelectorAll('.item.done').length;
+  const tot=catEl.querySelectorAll('.item').length;
+  catEl.querySelector('.cat-badge').textContent=done+'/'+tot;
+}
+
+function toggleItem(key,el){
+  state[key]=!state[key];
+  save();
+  el.classList.toggle('done',state[key]);
+  updateCatBadge(el.closest('.cat'));
+  updateProgress();
+}
+
+function toggleCat(el){
+  const cat=el.closest('.cat');
+  const body=cat.querySelector('.cat-body');
+  const closing=!cat.classList.contains('closed');
+  if(closing){
+    body.style.maxHeight=body.scrollHeight+'px';
+    requestAnimationFrame(()=>{body.style.maxHeight='0px'});
+    cat.classList.add('closed');
+  } else {
+    cat.classList.remove('closed');
+    body.style.maxHeight=body.scrollHeight+'px';
+    body.addEventListener('transitionend',()=>{body.style.maxHeight='none'},{once:true});
+  }
+}
+
+function resetAll(){
+  if(!confirm('Desmarcar todos os itens?'))return;
+  state={};save();
+  document.querySelectorAll('.item').forEach(el=>el.classList.remove('done'));
+  document.querySelectorAll('.cat').forEach(el=>updateCatBadge(el));
+  updateProgress();
+}
+
+function render(){
+  const main=document.getElementById('main');
+  DATA.forEach((cat,ci)=>{
+    const checkedN=cat.items.filter((_,ii)=>state[ci+'-'+ii]).length;
+    const catDiv=document.createElement('div');
+    catDiv.className='cat';
+
+    const itemsHTML=cat.items.map((item,ii)=>{
+      const key=ci+'-'+ii;
+      const done=state[key]?'done':'';
+      const optBadge=item.o?'<span class="badge-opt">opcional</span>':'';
+      const subHTML=item.s?`<div class="item-sub">${item.s}</div>`:'';
+      return `<div class="item ${done}" data-key="${key}" onclick="toggleItem('${key}',this)">
+        <div class="cb"><span class="cb-tick">✓</span></div>
+        <div class="item-body">
+          <div class="item-row">
+            <span class="item-name">${item.n}</span>${optBadge}
+          </div>
+          <div class="item-recipe">${item.r}</div>
+          ${subHTML}
+        </div>
+      </div>`;
+    }).join('');
+
+    catDiv.innerHTML=`
+      <div class="cat-hd" onclick="toggleCat(this)">
+        <div class="cat-hd-l"><span>${cat.icon}</span><span>${cat.name}</span></div>
+        <div class="cat-hd-r">
+          <span class="cat-badge">${checkedN}/${cat.items.length}</span>
+          <span class="cat-chevron">▾</span>
+        </div>
+      </div>
+      <div class="cat-body" style="max-height:none">${itemsHTML}</div>`;
+
+    main.appendChild(catDiv);
+  });
+  updateProgress();
+}
+
+render();
+</script>
+</body>
+</html>
